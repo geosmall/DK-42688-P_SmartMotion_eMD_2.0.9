@@ -90,7 +90,7 @@ void        msg_printer(int level, const char *str, va_list ap);
 
 int main(void)
 {
-	int rc = 0;
+	int                       rc = 0;
 	struct inv_icm426xx_serif icm426xx_serif;
 
 	/* Initialize MCU hardware */
@@ -98,9 +98,29 @@ int main(void)
 
 	/* Initialize Icm426xx */
 	rc = SetupInvDevice(&icm426xx_serif);
-	
-}
+	check_rc(rc, "error while setting up INV device");
 
+	/* Configure Icm426xx */
+	/* /!\ In this example, the data output frequency will be the faster  between Accel and Gyro odr */
+	rc = ConfigureInvDevice((uint8_t)IS_LOW_NOISE_MODE, ICM426XX_ACCEL_CONFIG0_FS_SEL_4g,
+	                        ICM426XX_GYRO_CONFIG0_FS_SEL_2000dps, ICM426XX_ACCEL_CONFIG0_ODR_1_KHZ,
+	                        ICM426XX_GYRO_CONFIG0_ODR_1_KHZ, (uint8_t)USE_CLK_IN);
+
+	check_rc(rc, "error while configuring INV device");
+
+	do {
+		/* Poll device for data */
+		if (irq_from_device & TO_MASK(INV_GPIO_INT1)) {
+			rc = GetDataFromInvDevice();
+			check_rc(rc, "error while processing FIFO");
+
+			inv_disable_irq();
+			irq_from_device &= ~TO_MASK(INV_GPIO_INT1);
+			inv_enable_irq();
+		}
+
+	} while (1);
+}
 
 /* --------------------------------------------------------------------------------------
  *  Functions definitions

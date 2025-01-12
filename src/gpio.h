@@ -115,8 +115,7 @@ int inv_gpio_disable_clk_on_pin(unsigned pin_num);
  *  @param[in]	interrupt_cb    callback to call on interrupt
  *  @param[in]	context         context passed to callback
  */
-void inv_gpio_sensor_irq_init(unsigned pin_num,
-		void (*interrupt_cb)(void * context, unsigned int_num), void * context);
+void inv_gpio_sensor_irq_init(unsigned pin_num, void (*interrupt_cb)(void * context, unsigned int_num), void * context);
 
 #ifdef __cplusplus
 }

@@ -30,9 +30,9 @@ extern "C" {
 // #include "uart.h"
 #include "Invn/Drivers/Icm426xx/Icm426xxTransport.h"
 
-// #ifndef TO_MASK
-// #define TO_MASK(a) (1U << (unsigned)(a))
-// #endif
+#ifndef TO_MASK
+#define TO_MASK(a) (1U << (unsigned)(a))
+#endif
 
 /** @brief define all supported board revisions types*/
 // #define SM_REVB_DB 0
