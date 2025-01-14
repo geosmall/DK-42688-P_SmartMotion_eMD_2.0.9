@@ -25,7 +25,7 @@
 // #include "wdt.h"
 // #include "ioport.h"
 #include <stdint.h>
-#include "stm32_def.h"
+#include "stm32yyxx.h"
 
 #include "common.h"
 
