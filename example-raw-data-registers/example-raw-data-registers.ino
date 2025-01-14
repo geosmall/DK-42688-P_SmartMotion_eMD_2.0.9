@@ -8,8 +8,6 @@ UVOSboard hw;
 extern "C" {
 #endif
 
-
-
 uint64_t inv_timer_get_counter(unsigned timer_num)
 {
 	return System::GetUs();
