@@ -9,7 +9,7 @@
 /* board driver */
 #include "common.h"
 #include "uart.h"
-// #include "uart_mngr.h"
+#include "uart_mngr.h"
 // #include "delay.h"
 // #include "timer.h"
 #include "gpio.h"
@@ -61,7 +61,7 @@ void        msg_printer(int level, const char *str, va_list ap);
 
 int inv_main(void)
 {
-	int                       rc = 0;
+	int rc = 0;
 	struct inv_icm426xx_serif icm426xx_serif;
 
 	/* Initialize MCU hardware */
@@ -137,8 +137,8 @@ static void check_rc(int rc, const char *msg_context)
  */
 void msg_printer(int level, const char *str, va_list ap)
 {
-	static char out_str[256]; /* static to limit stack usage */
-	unsigned    idx                  = 0;
+    static char out_str[256]; /* static to limit stack usage */
+    unsigned idx = 0;
 	const char *s[INV_MSG_LEVEL_MAX] = {
 		"", // INV_MSG_LEVEL_OFF
 		"[E] ", // INV_MSG_LEVEL_ERROR
