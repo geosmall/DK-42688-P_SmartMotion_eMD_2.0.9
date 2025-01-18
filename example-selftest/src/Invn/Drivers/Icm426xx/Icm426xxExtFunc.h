@@ -1,6 +1,6 @@
 /*
  * ________________________________________________________________________________________________________
- * Copyright (c) 2016-2016 InvenSense Inc. All rights reserved.
+ * Copyright (c) 2017 InvenSense Inc. All rights reserved.
  *
  * This software, related documentation and any modifications thereto (collectively “Software”) is subject
  * to InvenSense and its licensors' intellectual property rights under U.S. and international copyright
@@ -21,44 +21,38 @@
  * ________________________________________________________________________________________________________
  */
 
-// #include "sysclk.h"
-// #include "wdt.h"
-// #include "ioport.h"
+/** @defgroup Extfunc External functions
+ *  @brief    External functions to be defined in application level.
+ *  @{
+ */
+
+/** @file Icm426xxExtFunc.h */
+
+#ifndef _INV_ICM426XX_EXTFUNC_H_
+#define _INV_ICM426XX_EXTFUNC_H_
+
 #include <stdint.h>
-#include "stm32_def.h"
 
-#include "common.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/* This variable contains the number of nested calls to disable_irq */
-static uint32_t sDisableIntCount = 0;
+/** @brief Hook for low-level high res system sleep() function to be implemented by upper layer
+ *  ~100us resolution is sufficient
+ *  @param[in] us number of us the calling thread should sleep
+ */
+extern void inv_icm426xx_sleep_us(uint32_t us);
 
-void inv_board_hal_init(void)
-{
-	/* Initialize the SAM system */
-	// sysclk_init();
-	
-	// ioport_init();
-	
-	/* Initialize LED0, turned off */
-	// ioport_set_pin_dir(PIO_PA6_IDX, IOPORT_DIR_OUTPUT);
-	// ioport_set_pin_level(PIO_PA6_IDX, IOPORT_PIN_LEVEL_HIGH);
+/** @brief Hook for low-level high res system get_time() function to be implemented by upper layer
+ *  Timer should be on 64bit with a 1 us resolution
+ *  @return The current time in us
+ */
+extern uint64_t inv_icm426xx_get_time_us(void);
 
-	/* Disable the watchdog */
-	// WDT->WDT_MR = WDT_MR_WDDIS;
+#ifdef __cplusplus
 }
+#endif
 
-void inv_disable_irq(void)
-{
-	if(sDisableIntCount == 0) {
-		__disable_irq();
-	}
-	sDisableIntCount ++;
-}
+#endif /* _INV_ICM426XX_EXTFUNC_H_ */
 
-void inv_enable_irq(void)
-{
-	sDisableIntCount --;
-	if(sDisableIntCount == 0) {
-		__enable_irq();
-	}
-}
+/** @} */
