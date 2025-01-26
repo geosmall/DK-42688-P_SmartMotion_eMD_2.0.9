@@ -51,10 +51,10 @@ extern "C" {
 void inv_io_hal_board_init(void);
 /* /!\ When used, the below function be should called before inv_io_hal_board_init */
 void inv_io_hal_configure_spi_speed(uint8_t spi_freq_mhz);
-int  inv_io_hal_init(struct inv_icm426xx_serif *serif);
-int  inv_io_hal_configure(struct inv_icm426xx_serif *serif);
-int  inv_io_hal_read_reg(struct inv_icm426xx_serif *serif, uint8_t reg, uint8_t *rbuffer, uint32_t rlen);
-int  inv_io_hal_write_reg(struct inv_icm426xx_serif *serif, uint8_t reg, const uint8_t *wbuffer, uint32_t wlen);
+int  inv_io_hal_init(struct inv_icm426xx_serif* serif);
+int  inv_io_hal_configure(struct inv_icm426xx_serif* serif);
+int  inv_io_hal_read_reg(struct inv_icm426xx_serif* serif, uint8_t reg, uint8_t* rbuffer, uint32_t rlen);
+int  inv_io_hal_write_reg(struct inv_icm426xx_serif* serif, uint8_t reg, const uint8_t* wbuffer, uint32_t wlen);
 
 // int akm_io_hal_init(void *serif);
 // int akm_io_hal_read_reg(void *serif, uint8_t reg, uint8_t *rbuffer, uint32_t rlen);

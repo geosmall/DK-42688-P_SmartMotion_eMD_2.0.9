@@ -37,8 +37,14 @@ using namespace uvos;
     constexpr Pin RX_PIN = Pin(PORTA, 10);
 #endif /* ARDUINO_FC_MatekH743 */
 
+constexpr bool off = 0;
+constexpr bool on = 1;
+
 UVOSboard hw;
 UartHandler uart;
+
+SpiHandle spi_handle;         // Handle we'll use to interact with IMU SPI
+SpiHandle::Config spi_conf;   // Structure to configure the IMU SPI instance
 
 // Global print buffer
 char buf[128];
@@ -48,23 +54,24 @@ int main(void)
     // Initialize the UVOS board hardware
     hw.Init();
 
-    // Configure the Uart Peripheral to print out results
-    UartHandler::Config uart_conf;
-    uart_conf.periph        = UART_NUM;
-    uart_conf.mode          = UartHandler::Config::Mode::TX;
-    uart_conf.pin_config.tx = TX_PIN;
-    uart_conf.pin_config.rx = RX_PIN;
+    int str_len = sprintf(buf, "Initializing Example SelfTest...\n");
+    uart.BlockingTransmit((uint8_t*)buf, str_len);
 
-    // Initialize the uart peripheral and start the DMA transmit
-    uart.Init(uart_conf);
+    // Create Invn serial spi interface
+    inv_icm426xx_serif spi_if = {
+        .context = &spi_handle,
+    };
 
     // Give ICM-42688P some time to stabilize
     System::Delay(5);
 
-    int str_len = sprintf(buf, "Initializing Example SelfTest...\n");
-    uart.BlockingTransmit((uint8_t*)buf, str_len);
-
+    // Call the main function of the Invensense example
     inv_main();
+
+    // Infinite loop
+    while(1) {
+        // Do nothing
+    }
 }
 
 /* --------------------------------------------------------------------------------------
@@ -74,6 +81,25 @@ int main(void)
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/* This variable contains the number of nested calls to disable_irq */
+static uint32_t sDisableIntCount = 0;
+
+void inv_disable_irq(void)
+{
+    if(sDisableIntCount == 0) {
+        __disable_irq();
+    }
+    sDisableIntCount ++;
+}
+
+void inv_enable_irq(void)
+{
+    sDisableIntCount --;
+    if(sDisableIntCount == 0) {
+        __enable_irq();
+    }
+}
 
 int inv_uart_mngr_puts(inv_uart_num_t uart_num, const char* s, unsigned short l)
 {
@@ -86,12 +112,12 @@ int inv_uart_mngr_puts(inv_uart_num_t uart_num, const char* s, unsigned short l)
 
 uint64_t inv_timer_get_counter(unsigned timer_num)
 {
-	return System::GetUs();
+    return System::GetUs();
 }
 
 void inv_delay_us(uint32_t us)
 {
-	System::DelayUs(us);
+    System::DelayUs(us);
 }
 
 #ifdef __cplusplus

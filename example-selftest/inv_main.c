@@ -1,5 +1,6 @@
 
 #include "example-selftest.h"
+#include "inv_main.h"
 
 /* InvenSense utils */
 #include "Invn/EmbUtils/Message.h"
@@ -13,8 +14,6 @@
 // #include "delay.h"
 // #include "timer.h"
 #include "gpio.h"
-
-#include "system-interface.h"
 
 /* std */
 #include <stdio.h>
