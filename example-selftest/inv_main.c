@@ -9,11 +9,11 @@
 
 /* board driver */
 #include "common.h"
-#include "uart.h"
+// #include "uart.h"
 #include "uart_mngr.h"
 // #include "delay.h"
 // #include "timer.h"
-#include "gpio.h"
+// #include "gpio.h"
 
 /* std */
 #include <stdio.h>
